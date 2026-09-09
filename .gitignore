@@ -1,0 +1,47 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated / Local Data
+uploads
+Chroma_db
+chroma_db
+scratch
+
+# Node / React / Vite
+node_modules/
+dist/
+.vite/
+
+# IDE / OS
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+
+# PostgreSQL local data
+Backend/pgdata/
+
+# Application-generated document storage
+Backend/storage/documents/
+Backend/storage/
+
+# Local vector/database data
+Chroma_db
+chroma_db
+uploads
