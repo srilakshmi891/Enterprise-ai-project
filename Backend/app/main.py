@@ -18,7 +18,14 @@ app = FastAPI(
 )
 
 # Allowed origins for frontend clients
-origins = [settings.FRONTEND_URL] if settings.FRONTEND_URL else ["http://localhost:5173"]
+# Allowed origins for frontend clients (including local dev and production URL)
+origins = [
+    settings.FRONTEND_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+# Remove any None entries
+origins = [origin for origin in origins if origin]
 
 # Enable CORS for frontend clients with credential support
 app.add_middleware(
