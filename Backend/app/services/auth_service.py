@@ -2,6 +2,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.models.user import User
+import logging
 from app.schemas.auth import UserRegister, UserLogin
 from app.utils.security import (
     hash_password,
@@ -52,18 +53,20 @@ def register_user(db: Session, user_data: UserRegister) -> User:
 
 def authenticate_user(db: Session, user_data: UserLogin) -> User:
     """Authenticate a user using username or email and password."""
-    identifier = user_data.username.strip()
+    identifier = user_data.username.strip().lower()
 
+    logging.debug(f"Attempting authentication for identifier: {identifier}")
     user = (
         db.query(User)
         .filter(
             or_(
-                User.username == identifier,
-                User.email == identifier,
+                User.username.ilike(identifier),
+                User.email.ilike(identifier),
             )
         )
         .first()
     )
+    logging.debug(f"User lookup result: {user}")
 
     if not user:
         raise ValueError("Invalid username or password")
@@ -72,7 +75,10 @@ def authenticate_user(db: Session, user_data: UserLogin) -> User:
         user_data.password,
         user.password_hash,
     ):
+        logging.debug("Password verification failed")
         raise ValueError("Invalid username or password")
+    else:
+        logging.debug("Password verification succeeded")
 
     return user
 
